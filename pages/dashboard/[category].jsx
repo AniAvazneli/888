@@ -1,7 +1,8 @@
+"use client"
 import { Fragment, useState } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import Logo from "../../public/assets/222.png";
-import { useRouter } from "next/router";
+import { usePathname, useSearchParams, useParams } from "next/navigation";
 import {
   Bars3Icon,
   BellIcon,
@@ -37,16 +38,15 @@ const userNavigation = [
   { name: "პროფილი", href: "#" },
   { name: "გამოსვლა", href: "#" },
 ];
-const router = useRouter();
 
-const category = router.query.category;
+const { category } = useParams();
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const renderComponent = () => {
   switch (category) {
-    case "buy_course":
+    case "MainPage":
       return <MainPage />;
     // case "my_courses":
     //   return <MyCourses />;
