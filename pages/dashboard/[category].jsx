@@ -1,8 +1,16 @@
-"use client"
-import { Fragment, useState } from "react";
-import { Dialog, Menu, Transition } from "@headlessui/react";
+"use client";
+import React from "react";
 import Logo from "../../public/assets/222.png";
-import { usePathname, useSearchParams, useParams } from "next/navigation";
+import {
+  CssBaseline,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+} from "@mui/material";
+import { Bars3BottomLeftIcon } from "@heroicons/react/24/outline";
 import {
   Bars3Icon,
   BellIcon,
@@ -13,61 +21,86 @@ import {
   FolderIcon,
   HomeIcon,
   UsersIcon,
+  MagnifyingGlassIcon,
+  ChevronDownIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+// import InboxIcon from "@mui/icons-material/Inbox";
+// import MailIcon from "@mui/icons-material/Mail";
+import { Fragment, useState, useEffect } from "react";
+import { Dialog, Menu, Transition } from "@headlessui/react";
+import Image from "next/image";
 import {
-  ChevronDownIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/20/solid";
+  AiOutlineHome,
+  AiOutlineSafety,
+  AiOutlineDollar,
+} from "react-icons/ai";
+import Link from "next/link";
+import { BsClockHistory } from "react-icons/bs";
+import { MdOutlineCancel } from "react-icons/md";
+import { GiProgression } from "react-icons/gi";
+import { useRouter } from "next/router";
+import { usePathname, useSearchParams, useParams } from "next/router";
+
 import MainPage from "@/components/Dashboard/MainPage";
+import useNavigation from "@/hooks/useNavigation";
 
-const navigation = [
-  { name: "მთავარი", href: "#", icon: HomeIcon, current: true },
-  { name: "პროდუქტები", href: "#", icon: UsersIcon, current: false },
-  { name: "მომწოდებლები", href: "#", icon: FolderIcon, current: false },
-  { name: "შესყიდვები", href: "#", icon: CalendarIcon, current: false },
-  { name: "გაყიდვები", href: "#", icon: DocumentDuplicateIcon, current: false },
-  { name: "წარმოება", href: "#", icon: ChartPieIcon, current: false },
-  { name: "ბუღალტერია", href: "#", icon: ChartPieIcon, current: false },
-  { name: "რეპორტები", href: "#", icon: ChartPieIcon, current: false },
-  { name: "სტატისტიკა", href: "#", icon: ChartPieIcon, current: false },
-  { name: "ადმინისტრირება", href: "#", icon: ChartPieIcon, current: false },
-  { name: "დახმარება", href: "#", icon: ChartPieIcon, current: false },
-];
-const userNavigation = [
-  { name: "პროფილი", href: "#" },
-  { name: "გამოსვლა", href: "#" },
-];
-
-const { category } = useParams();
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-const renderComponent = () => {
-  switch (category) {
-    case "MainPage":
-      return <MainPage />;
-    // case "my_courses":
-    //   return <MyCourses />;
-    default:
-      break;
-  }
-};
+const Dashboard = () => {
+  const router = useRouter();
+  // const { category } = useParams();
+  const category = router.query.category;
+  // let category = "main_page";
+  // const pathname = usePathname();
 
-const Sarchevi = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigation = [
+    {
+      name: "მთავარი",
+      href: "main_page",
+      icon: AiOutlineDollar,
+      current: true,
+    },
+    {
+      name: "პროდუქტები",
+      href: "your_posts",
+      icon: AiOutlineDollar,
+      current: true,
+    },
+    {
+      name: "წიგნები",
+      href: "/admin/admin_books",
+      icon: AiOutlineHome,
+      current: false,
+    },
+    {
+      name: "ვიდეოები",
+      href: "/admin/admin_videos",
+      icon: AiOutlineHome,
+      current: false,
+    },
+    {
+      name: "იუზერები",
+      href: "/admin/admin_users",
+      icon: AiOutlineHome,
+      current: false,
+    },
+  ];
+
+  const renderComponent = () => {
+    switch (category) {
+      case "main_page":
+        return <MainPage />;
+      default:
+        break;
+    }
+  };
 
   return (
     <>
-      {/*
-          This example requires updating your template:
-  
-          ```
-          <html class="h-full bg-white">
-          <body class="h-full">
-          ```
-        */}
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
@@ -123,14 +156,14 @@ const Sarchevi = () => {
                   </Transition.Child>
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
-                    <div className="flex h-16 shrink-0 items-center">
+                    <div className="flex h-16 shrink-0 items-center ">
                       <img
                         className="h-8 w-auto"
                         src={Logo}
                         alt="Your Company"
                       />
                     </div>
-                    <nav className="flex flex-1 flex-col">
+                    <nav className="flex flex-1 flex-col ">
                       <ul role="list" className="flex flex-1 flex-col gap-y-7">
                         <li>
                           <ul role="list" className="-mx-2 space-y-1">
@@ -139,7 +172,7 @@ const Sarchevi = () => {
                                 <a
                                   href={item.href}
                                   className={classNames(
-                                    item.current
+                                    category === item.href
                                       ? "bg-gray-50 text-indigo-600"
                                       : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
@@ -147,7 +180,7 @@ const Sarchevi = () => {
                                 >
                                   <item.icon
                                     className={classNames(
-                                      item.current
+                                      category === item.href
                                         ? "text-indigo-600"
                                         : "text-gray-400 group-hover:text-indigo-600",
                                       "h-6 w-6 shrink-0"
@@ -184,12 +217,12 @@ const Sarchevi = () => {
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
-            <div className="flex h-16 shrink-0 items-center">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200  px-6 pb-4">
+            <div className="flex h-16 shrink-0 items-center ">
               <img className="h-8 w-auto" src={Logo} alt="Your Company" />
             </div>
-            <nav className="flex flex-1 flex-col">
-              <ul role="list" className="flex flex-1 flex-col gap-y-7">
+            <nav className="flex flex-1 flex-col ">
+              <ul role="list" className="flex flex-1 flex-col gap-y-7  ">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
@@ -197,17 +230,17 @@ const Sarchevi = () => {
                         <a
                           href={item.href}
                           className={classNames(
-                            item.current
-                              ? "bg-gray-50 text-indigo-600"
-                              : "text-gray-700 hover:text-indigo-600 hover:bg-gray-50",
+                            category === item.href
+                              ? "bg-[rgb(59,130,246,0.5)] text-white"
+                              : "text-gray-700 hover:text-[bg-[rgb(59,130,246,0.5)]] hover:bg-[rgb(59,130,246,0.1)]",
                             "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                           )}
                         >
                           <item.icon
                             className={classNames(
-                              item.current
-                                ? "text-indigo-600"
-                                : "text-gray-400 group-hover:text-indigo-600",
+                              category === item.href
+                                ? "text-white"
+                                : "text-gray-400 group-hover:text[bg-[rgb(59,130,246,0.5)]]",
                               "h-6 w-6 shrink-0"
                             )}
                             aria-hidden="true"
@@ -217,18 +250,6 @@ const Sarchevi = () => {
                       </li>
                     ))}
                   </ul>
-                </li>
-                <li className="mt-auto">
-                  <a
-                    href="#"
-                    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
-                  >
-                    <Cog6ToothIcon
-                      className="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
-                      aria-hidden="true"
-                    />
-                    Settings
-                  </a>
                 </li>
               </ul>
             </nav>
@@ -316,7 +337,7 @@ const Sarchevi = () => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                      {userNavigation.map((item) => (
+                      {navigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
                             <a
@@ -349,4 +370,4 @@ const Sarchevi = () => {
   );
 };
 
-export default Sarchevi;
+export default Dashboard;
