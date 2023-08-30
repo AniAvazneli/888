@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+// import "@headlessui/react/styles.css"; // Make sure to include the correct path
 import Logo from "../../public/assets/222.png";
 import {
   CssBaseline,
@@ -25,8 +26,8 @@ import {
   ChevronDownIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-// import InboxIcon from "@mui/icons-material/Inbox";
-// import MailIcon from "@mui/icons-material/Mail";
+import InboxIcon from "@mui/icons-material/Inbox";
+import MailIcon from "@mui/icons-material/Mail";
 import { Fragment, useState, useEffect } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import Image from "next/image";
@@ -41,11 +42,11 @@ import { MdOutlineCancel } from "react-icons/md";
 import { GiProgression } from "react-icons/gi";
 import { useRouter } from "next/router";
 import { usePathname, useSearchParams, useParams } from "next/router";
-
 import MainPage from "@/components/Dashboard/MainPage";
 import useNavigation from "@/hooks/useNavigation";
 
-
+import MainPage from "@/components/Dashboard/MainPage";
+import useNavigation from "@/hooks/useNavigation";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -65,7 +66,7 @@ const Dashboard = () => {
       current: true,
     },
     {
-      name: "პროდუქტები",
+      name: "შენი პოსტები",
       href: "your_posts",
       icon: AiOutlineDollar,
       current: true,
@@ -157,11 +158,11 @@ const Dashboard = () => {
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center ">
-                      <img
+                      {/* <img
                         className="h-8 w-auto"
                         src={Logo}
                         alt="Your Company"
-                      />
+                      /> */}
                     </div>
                     <nav className="flex flex-1 flex-col ">
                       <ul role="list" className="flex flex-1 flex-col gap-y-7">
